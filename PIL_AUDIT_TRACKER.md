@@ -14,8 +14,8 @@ This document tracks the security audit status of all PIL gadgets in the AVM2 co
 
 | Status | Count |
 |--------|-------|
-| ✅ Audited | 7 |
-| ⏳ Pending | 58 |
+| ✅ Audited | 17 |
+| ⏳ Pending | 48 |
 | **Total** | **65** |
 
 ---
@@ -33,22 +33,22 @@ This document tracks the security audit status of all PIL gadgets in the AVM2 co
 
 ### Memory
 - [x] `memory.pil` - ✅ Audited (see MEMORY_SECURITY_AUDIT.md)
-- [ ] `data_copy.pil` - ⏳ Pending
+- [x] `data_copy.pil` - ✅ Audited (see DATA_COPY_SECURITY_AUDIT.md)
 
 ### Cryptographic Primitives
 - [ ] `poseidon2_hash.pil` - ⏳ Pending
 - [ ] `poseidon2_mem.pil` - ⏳ Pending
 - [ ] `poseidon2_params.pil` - ⏳ Pending
 - [ ] `poseidon2_perm.pil` - ⏳ Pending
-- [ ] `sha256.pil` - ⏳ Pending
+- [x] `sha256.pil` - ✅ Audited (see SHA256_SECURITY_AUDIT.md)
 - [ ] `sha256_mem.pil` - ⏳ Pending
-- [ ] `keccakf1600.pil` - ⏳ Pending
+- [x] `keccakf1600.pil` - ✅ Audited (see KECCAKF1600_SECURITY_AUDIT.md)
 - [ ] `keccak_memory.pil` - ⏳ Pending
 
 ### Elliptic Curve
-- [ ] `ecc.pil` - ⏳ Pending
+- [x] `ecc.pil` - ✅ Audited (see ECC_SECURITY_AUDIT.md)
 - [ ] `ecc_mem.pil` - ⏳ Pending
-- [ ] `scalar_mul.pil` - ⏳ Pending
+- [x] `scalar_mul.pil` - ✅ Audited (see SCALAR_MUL_SECURITY_AUDIT.md)
 
 ### Execution
 - [ ] `execution.pil` - ⏳ Pending
@@ -58,9 +58,9 @@ This document tracks the security audit status of all PIL gadgets in the AVM2 co
 - [ ] `execution/registers.pil` - ⏳ Pending
 
 ### Context & Stack
-- [ ] `context.pil` - ⏳ Pending
-- [ ] `context_stack.pil` - ⏳ Pending
-- [ ] `internal_call_stack.pil` - ⏳ Pending
+- [x] `context.pil` - ✅ Audited (see CONTEXT_SECURITY_AUDIT.md)
+- [x] `context_stack.pil` - ✅ Audited (see CONTEXT_STACK_SECURITY_AUDIT.md)
+- [x] `internal_call_stack.pil` - ✅ Audited (see INTERNAL_CALL_STACK_SECURITY_AUDIT.md)
 
 ### Bytecode
 - [ ] `bytecode/address_derivation.pil` - ⏳ Pending
@@ -73,7 +73,7 @@ This document tracks the security audit status of all PIL gadgets in the AVM2 co
 - [ ] `bytecode/update_check.pil` - ⏳ Pending
 
 ### Calldata
-- [ ] `calldata.pil` - ⏳ Pending
+- [x] `calldata.pil` - ✅ Audited (see CALLDATA_SECURITY_AUDIT.md)
 - [ ] `calldata_hashing.pil` - ⏳ Pending
 
 ### Transaction
@@ -83,7 +83,7 @@ This document tracks the security audit status of all PIL gadgets in the AVM2 co
 - [ ] `public_inputs.pil` - ⏳ Pending
 
 ### Trees (Merkle Proofs)
-- [ ] `trees/merkle_check.pil` - ⏳ Pending
+- [x] `trees/merkle_check.pil` - ✅ Audited (see MERKLE_CHECK_SECURITY_AUDIT.md)
 - [ ] `trees/l1_to_l2_message_tree_check.pil` - ⏳ Pending
 - [ ] `trees/note_hash_tree_check.pil` - ⏳ Pending
 - [ ] `trees/nullifier_check.pil` - ⏳ Pending
@@ -174,6 +174,84 @@ This document tracks the security audit status of all PIL gadgets in the AVM2 co
   - Comprehensive error handling
   - Proper integration with range_check, gt, ff_gt gadgets
 
+### 8. merkle_check.pil
+- **Date**: 2024
+- **Status**: ✅ SOUND
+- **Report**: [MERKLE_CHECK_SECURITY_AUDIT.md](./MERKLE_CHECK_SECURITY_AUDIT.md)
+- **Findings**:
+  - No vulnerabilities found
+  - INFO-1: Write selector usage warning documented
+
+### 9. sha256.pil
+- **Date**: 2024
+- **Status**: ✅ SOUND
+- **Report**: [SHA256_SECURITY_AUDIT.md](./SHA256_SECURITY_AUDIT.md)
+- **Findings**:
+  - No vulnerabilities found
+  - Depends on bitwise gadget (ghost row fix critical)
+
+### 10. keccakf1600.pil
+- **Date**: 2024
+- **Status**: ✅ SOUND
+- **Report**: [KECCAKF1600_SECURITY_AUDIT.md](./KECCAKF1600_SECURITY_AUDIT.md)
+- **Findings**:
+  - No vulnerabilities found
+  - 100+ bitwise lookups per round (depends on ghost row fix)
+
+### 11. ecc.pil
+- **Date**: 2024
+- **Status**: ✅ SOUND
+- **Report**: [ECC_SECURITY_AUDIT.md](./ECC_SECURITY_AUDIT.md)
+- **Findings**:
+  - No vulnerabilities found
+  - INFO-1: No on-curve verification (caller responsibility)
+
+### 12. scalar_mul.pil
+- **Date**: 2024
+- **Status**: ✅ SOUND
+- **Report**: [SCALAR_MUL_SECURITY_AUDIT.md](./SCALAR_MUL_SECURITY_AUDIT.md)
+- **Findings**:
+  - No vulnerabilities found
+  - Fixed 254 rows per operation
+
+### 13. data_copy.pil
+- **Date**: 2024
+- **Status**: ✅ SOUND
+- **Report**: [DATA_COPY_SECURITY_AUDIT.md](./DATA_COPY_SECURITY_AUDIT.md)
+- **Findings**:
+  - No vulnerabilities found
+  - Uses permutation for secure memory integration
+
+### 14. context.pil
+- **Date**: 2024
+- **Status**: ✅ SOUND
+- **Report**: [CONTEXT_SECURITY_AUDIT.md](./CONTEXT_SECURITY_AUDIT.md)
+- **Findings**:
+  - No vulnerabilities found
+  - Large virtual gadget (40+ columns)
+
+### 15. context_stack.pil
+- **Date**: 2024
+- **Status**: ✅ SOUND (N/A - Storage Only)
+- **Report**: [CONTEXT_STACK_SECURITY_AUDIT.md](./CONTEXT_STACK_SECURITY_AUDIT.md)
+- **Findings**:
+  - Storage-only gadget, no logic vulnerabilities possible
+
+### 16. internal_call_stack.pil
+- **Date**: 2024
+- **Status**: ✅ SOUND (N/A - Storage Only)
+- **Report**: [INTERNAL_CALL_STACK_SECURITY_AUDIT.md](./INTERNAL_CALL_STACK_SECURITY_AUDIT.md)
+- **Findings**:
+  - Storage-only gadget, no logic vulnerabilities possible
+
+### 17. calldata.pil
+- **Date**: 2024
+- **Status**: ✅ SOUND
+- **Report**: [CALLDATA_SECURITY_AUDIT.md](./CALLDATA_SECURITY_AUDIT.md)
+- **Findings**:
+  - No vulnerabilities found
+  - INFO-1: Values are hints, verified by calldata_hashing
+
 ---
 
 ## Audit Priority
@@ -182,14 +260,14 @@ This document tracks the security audit status of all PIL gadgets in the AVM2 co
 1. ~~`memory.pil`~~ - ✅ COMPLETE
 2. ~~`ff_gt.pil`~~ - ✅ COMPLETE
 3. ~~`alu.pil`~~ - ✅ COMPLETE
-4. `trees/merkle_check.pil` - Merkle proof verification
+4. ~~`trees/merkle_check.pil`~~ - ✅ COMPLETE
 5. `execution.pil` - Main execution logic
 
 ### High Priority (Cryptographic)
 1. `poseidon2_perm.pil` - Hash function core (large file)
-2. `sha256.pil` - SHA256 implementation
-3. `keccakf1600.pil` - Keccak permutation
-4. `ecc.pil` - Elliptic curve operations
+2. ~~`sha256.pil`~~ - ✅ COMPLETE
+3. ~~`keccakf1600.pil`~~ - ✅ COMPLETE
+4. ~~`ecc.pil`~~ - ✅ COMPLETE
 
 ### Medium Priority (Opcodes & Integration)
 1. All `opcodes/*.pil` files

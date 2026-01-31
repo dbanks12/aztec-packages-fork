@@ -6,6 +6,53 @@ This document outlines the systematic approach for auditing PIL (Polynomial Iden
 
 ---
 
+## ⚠️ MANDATORY CHECKPOINT SYSTEM ⚠️
+
+**Before marking ANY gadget as audited, you MUST complete ALL phases below.**
+
+### Pre-Audit Checkpoint (BEFORE starting each gadget)
+```
+□ I will read the PIL file
+□ I will search for and read simulation code (simulation/gadgets/)
+□ I will search for and read trace generation code (tracegen/)
+□ I will search for callers (grep for lookups INTO this gadget)
+□ I will check for tests and fuzzers
+```
+
+### Mid-Audit Checkpoint (AFTER every 5 gadgets)
+```
+□ Did I actually read simulation code for each gadget?
+□ Did I actually read trace generation code for each gadget?
+□ Did I search for ALL callers of each gadget?
+□ Did I check for uninitialized variables in trace gen?
+□ Am I rushing through or doing thorough analysis?
+```
+
+### Post-Audit Checkpoint (BEFORE committing)
+```
+□ Each audit report includes trace generation analysis
+□ Each audit report includes simulation code analysis
+□ Each audit report lists ALL callers found
+□ I found real bugs or documented why the code is correct
+```
+
+---
+
+## File Location Patterns
+
+**ALWAYS search for these files before auditing:**
+
+| Component | Search Pattern |
+|-----------|----------------|
+| PIL | `pil/vm2/<gadget>.pil` |
+| Simulation | `grep -r "class.*<Gadget>" --include="*.hpp" simulation/` |
+| Trace Gen | `ls tracegen/*<gadget>*` or `grep -r "<gadget>" tracegen/` |
+| Tests | `ls **/test*<gadget>*` or `grep -r "<gadget>" --include="*.test.cpp"` |
+| Fuzzers | `ls avm_fuzzer/**/*<gadget>*` |
+| Callers | `grep -r "<gadget>\\." --include="*.pil" pil/` |
+
+---
+
 ## Audit Steps
 
 ### Phase 1: Discovery and Context Gathering

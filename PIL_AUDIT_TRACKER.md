@@ -14,8 +14,9 @@ This document tracks the security audit status of all PIL gadgets in the AVM2 co
 
 | Status | Count |
 |--------|-------|
-| ✅ Audited | 17 |
-| ⏳ Pending | 48 |
+| ✅ Audited | 26 |
+| ⚪ N/A | 2 |
+| ⏳ Pending | 37 |
 | **Total** | **65** |
 
 ---
@@ -29,25 +30,25 @@ This document tracks the security audit status of all PIL gadgets in the AVM2 co
 - [x] `alu.pil` - ✅ Audited (see ALU_SECURITY_AUDIT.md)
 - [x] `bitwise.pil` - ✅ Audited (see BITWISE_SECURITY_AUDIT.md)
 - [x] `to_radix.pil` - ✅ Audited (see TO_RADIX_SECURITY_AUDIT.md)
-- [ ] `to_radix_mem.pil` - ⏳ Pending
+- [x] `to_radix_mem.pil` - ✅ Audited (see TO_RADIX_MEM_SECURITY_AUDIT.md)
 
 ### Memory
 - [x] `memory.pil` - ✅ Audited (see MEMORY_SECURITY_AUDIT.md)
 - [x] `data_copy.pil` - ✅ Audited (see DATA_COPY_SECURITY_AUDIT.md)
 
 ### Cryptographic Primitives
-- [ ] `poseidon2_hash.pil` - ⏳ Pending
+- [x] `poseidon2_hash.pil` - ✅ Audited (see POSEIDON2_HASH_SECURITY_AUDIT.md)
 - [ ] `poseidon2_mem.pil` - ⏳ Pending
 - [ ] `poseidon2_params.pil` - ⏳ Pending
 - [ ] `poseidon2_perm.pil` - ⏳ Pending
 - [x] `sha256.pil` - ✅ Audited (see SHA256_SECURITY_AUDIT.md)
-- [ ] `sha256_mem.pil` - ⏳ Pending
+- [x] `sha256_mem.pil` - ✅ Audited (see SHA256_MEM_SECURITY_AUDIT.md)
 - [x] `keccakf1600.pil` - ✅ Audited (see KECCAKF1600_SECURITY_AUDIT.md)
-- [ ] `keccak_memory.pil` - ⏳ Pending
+- [x] `keccak_memory.pil` - ✅ Audited (see KECCAK_MEMORY_SECURITY_AUDIT.md)
 
 ### Elliptic Curve
 - [x] `ecc.pil` - ✅ Audited (see ECC_SECURITY_AUDIT.md)
-- [ ] `ecc_mem.pil` - ⏳ Pending
+- [x] `ecc_mem.pil` - ✅ Audited (see ECC_MEM_SECURITY_AUDIT.md)
 - [x] `scalar_mul.pil` - ✅ Audited (see SCALAR_MUL_SECURITY_AUDIT.md)
 
 ### Execution
@@ -74,13 +75,13 @@ This document tracks the security audit status of all PIL gadgets in the AVM2 co
 
 ### Calldata
 - [x] `calldata.pil` - ✅ Audited (see CALLDATA_SECURITY_AUDIT.md)
-- [ ] `calldata_hashing.pil` - ⏳ Pending
+- [x] `calldata_hashing.pil` - ✅ Audited (see CALLDATA_HASHING_SECURITY_AUDIT.md)
 
 ### Transaction
-- [ ] `tx.pil` - ⏳ Pending
-- [ ] `tx_context.pil` - ⏳ Pending
-- [ ] `tx_discard.pil` - ⏳ Pending
-- [ ] `public_inputs.pil` - ⏳ Pending
+- [x] `tx.pil` - ✅ Audited (see TX_SECURITY_AUDIT.md)
+- [x] `tx_context.pil` - ✅ Audited (see TX_SECURITY_AUDIT.md, virtual to tx.pil)
+- [x] `tx_discard.pil` - ✅ Audited (see TX_SECURITY_AUDIT.md, virtual to tx.pil)
+- [x] `public_inputs.pil` - ⚪ N/A (see PUBLIC_INPUTS_SECURITY_AUDIT.md)
 
 ### Trees (Merkle Proofs)
 - [x] `trees/merkle_check.pil` - ✅ Audited (see MERKLE_CHECK_SECURITY_AUDIT.md)
@@ -108,7 +109,7 @@ This document tracks the security audit status of all PIL gadgets in the AVM2 co
 - [ ] `opcodes/sstore.pil` - ⏳ Pending
 
 ### Infrastructure
-- [ ] `precomputed.pil` - ⏳ Pending
+- [x] `precomputed.pil` - ⚪ N/A (see PRECOMPUTED_SECURITY_AUDIT.md)
 - [ ] `constants_gen.pil` - ⏳ Pending (may be N/A - constants only)
 
 ---
@@ -251,6 +252,84 @@ This document tracks the security audit status of all PIL gadgets in the AVM2 co
 - **Findings**:
   - No vulnerabilities found
   - INFO-1: Values are hints, verified by calldata_hashing
+
+### 18. sha256_mem.pil
+- **Date**: 2024
+- **Status**: ✅ SOUND
+- **Report**: [SHA256_MEM_SECURITY_AUDIT.md](./SHA256_MEM_SECURITY_AUDIT.md)
+- **Findings**:
+  - No vulnerabilities found
+  - Batched tag checking using powers of 2
+  - Memory column reuse between reads and writes
+
+### 19. keccak_memory.pil
+- **Date**: 2024
+- **Status**: ✅ SOUND
+- **Report**: [KECCAK_MEMORY_SECURITY_AUDIT.md](./KECCAK_MEMORY_SECURITY_AUDIT.md)
+- **Findings**:
+  - No vulnerabilities found
+  - Multi-row value shifting for horizontal access
+  - Early termination on tag error
+
+### 20. ecc_mem.pil
+- **Date**: 2024
+- **Status**: ✅ SOUND
+- **Report**: [ECC_MEM_SECURITY_AUDIT.md](./ECC_MEM_SECURITY_AUDIT.md)
+- **Findings**:
+  - No vulnerabilities found
+  - On-curve verification (Y^2 = X^3 - 17)
+  - Infinity point remapping to (0, 0)
+
+### 21. to_radix_mem.pil
+- **Date**: 2024
+- **Status**: ✅ SOUND
+- **Report**: [TO_RADIX_MEM_SECURITY_AUDIT.md](./TO_RADIX_MEM_SECURITY_AUDIT.md)
+- **Findings**:
+  - No vulnerabilities found
+  - Big-endian reversal of little-endian core output
+  - Ghost row protection for memory writes
+
+### 22. poseidon2_hash.pil
+- **Date**: 2024
+- **Status**: ✅ SOUND
+- **Report**: [POSEIDON2_HASH_SECURITY_AUDIT.md](./POSEIDON2_HASH_SECURITY_AUDIT.md)
+- **Findings**:
+  - No vulnerabilities found
+  - IV = 2^64 * input_len for domain separation
+  - Padding not enforced to zero (caller responsibility)
+
+### 23. calldata_hashing.pil
+- **Date**: 2024
+- **Status**: ✅ SOUND
+- **Report**: [CALLDATA_HASHING_SECURITY_AUDIT.md](./CALLDATA_HASHING_SECURITY_AUDIT.md)
+- **Findings**:
+  - No vulnerabilities found
+  - Domain separator prepended
+  - Padding enforced to zero
+
+### 24. tx.pil (+ tx_context.pil + tx_discard.pil)
+- **Date**: 2024
+- **Status**: ✅ SOUND
+- **Report**: [TX_SECURITY_AUDIT.md](./TX_SECURITY_AUDIT.md)
+- **Findings**:
+  - No vulnerabilities found
+  - 12 phases with proper sequencing
+  - Revert handling with state restoration
+  - Discard flag propagation
+
+### 25. public_inputs.pil
+- **Date**: 2024
+- **Status**: ⚪ N/A (Infrastructure Only)
+- **Report**: [PUBLIC_INPUTS_SECURITY_AUDIT.md](./PUBLIC_INPUTS_SECURITY_AUDIT.md)
+- **Findings**:
+  - No constraints to audit, declarations only
+
+### 26. precomputed.pil
+- **Date**: 2024
+- **Status**: ⚪ N/A (Constants Only)
+- **Report**: [PRECOMPUTED_SECURITY_AUDIT.md](./PRECOMPUTED_SECURITY_AUDIT.md)
+- **Findings**:
+  - No constraints to audit, constant declarations only
 
 ---
 
